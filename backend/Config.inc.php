@@ -1,5 +1,4 @@
 <?php
-include 'helpers/cfg.php';
 /**
  * Este archivo contiene las variables de configuracion de la aplicacion
  * @author Henry Cumbicus <hcumbicusr@gmail.com>
@@ -62,6 +61,7 @@ $config['email_developer']="hcumbicusr@gmail.com";
 $config['developer_team'] = [
     "hcumbicusr" => "hcumbicusr"
 ];
+
 /**
  * @var host ruta completa
  */
@@ -69,14 +69,16 @@ $config['host']='http://localhost:88/inappi/';
 /**
  * @var path ruta raiz directorio
  */
-$config['path']='C:\xampp\htdocs\inappi/';
+$config['path']='C:\wamp\www\inappi/';
+
+include "backend/helpers/cfg.php";
 
 if ($config['entorno'] == 'D')
 {
     /**
     * @var accessBD n1 default
     */
-   $config['accessBD'] = array(
+   $config['access_bd'] = array(
        "host" => SERVERNAME,
        "port" => PORT,
        "db" => DATABASE,
@@ -89,7 +91,7 @@ if ($config['entorno'] == 'D')
     /**
     * @var accessBD n1
     */
-   $config['accessBD'] = array(
+   $config['access_bd'] = array(
        "host" => SERVERNAME,
        "port" => PORT,
        "db" => DATABASE,

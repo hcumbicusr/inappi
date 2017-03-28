@@ -51,21 +51,21 @@ class ClassMysqli implements IDatabase{
         //$con = null;
         $this->audit = $config['auditable'];
         $this->audit_table = $config['audit_table'];
-        $port = !empty($config['accessBD']['port'])? $config['accessBD']['port'] : '3306';
+        $port = !empty($config['access_bd']['port'])? $config['access_bd']['port'] : '3306';
         try {
             if (empty($database)) {
                 $this->con = new mysqli(
-                    $config['accessBD']['host'].":$port", 
-                    $config['accessBD']['user'], 
-                    $config['accessBD']['pass'],
-                    $config['accessBD']['db']);
-                //die(var_dump($config['accessBD']));
+                    $config['access_bd']['host'].":$port", 
+                    $config['access_bd']['user'], 
+                    $config['access_bd']['pass'],
+                    $config['access_bd']['db']);
+                //die(var_dump($config['access_bd']));
             }else {
                 $this->con = new mysqli(
-                        $config['accessBD_'.$database]['host'].":$port", 
-                        $config['accessBD_'.$database]['user'], 
-                        $config['accessBD_'.$database]['pass'],
-                        $config['accessBD_'.$database]['db']);
+                        $config['access_bd_'.$database]['host'].":$port", 
+                        $config['access_bd_'.$database]['user'], 
+                        $config['access_bd_'.$database]['pass'],
+                        $config['access_bd_'.$database]['db']);
             }
             
             if ($this->con->connect_errno) {

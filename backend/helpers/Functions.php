@@ -1,6 +1,6 @@
 <?php
 
-class Funciones {
+class Functions {
     /**
      * @todo genera codigo html para mostrar un combobox
      * @param array $array Array bidimensional de BD

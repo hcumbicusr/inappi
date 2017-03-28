@@ -14,7 +14,7 @@ require_once 'ClassMysqli.php';
 
 class Database{
     public function selectManager() {
-            switch (ClassConfig::get('managerDataBase')) {
+            switch (ClassConfig::get('database_manager')) {
                 
                 case 'mysqli':
                     return new ClassMysqli();
