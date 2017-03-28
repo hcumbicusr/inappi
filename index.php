@@ -15,8 +15,6 @@ $test = $conexion->select("SELECT * FROM example");
 <body>
 
 <h1>Bienvenido <?php echo $config['app_name']; ?></h1>
-<pre>
-	<?php print_r($test) ?>
-</pre>
+<?php pr( $test ) ?>
 </body>
 </html>

@@ -15,38 +15,27 @@ $config['charset']= 'UTF-8';
  * @var language
  */
 $config['lang']= 'es-ES';
-
-/**
- * @var entorno : D-> Desarrollo; P-> Produccion
- */
-$config['entorno']= 'D';
-
-if ($config['entorno'] == 'D')
-{
-    ini_set("display_errors", true);
-    error_reporting(E_ALL);
-}elseif($config['entorno'] == 'P')
-{
-    ini_set("display_errors", false);
-    error_reporting(0);
-}
-
 /**
 * @var default_timezone : zona horaria default
 */
 $config['default_timezone'] = 'America/Lima';
+/**
+* @var memory_limit : limite de memoria
+*/
+$config['memory_limit'] = 'America/Lima';
 
 date_default_timezone_set( $config['default_timezone'] );
 setlocale( LC_ALL, $config['lang'] );
+ini_set('memory_limit', $config['memory_limit']);
 
 /**
 *@var name
 */
-$config['title']="inappi";
+$config['app_title']="inappi";
 /**
 *@var version
 */
-$config['version']="1";
+$config['app_version']="1";
 /**
 *@var name
 */
@@ -65,13 +54,31 @@ $config['developer_team'] = [
 /**
  * @var host ruta completa
  */
-$config['host']='http://localhost:88/inappi/';
+$config['site_url']='http://localhost:88/'.$config['app_name'];
 /**
  * @var path ruta raiz directorio
  */
-$config['path']='C:\wamp\www\inappi/';
+$config['path']="C:\wamp\www\\".$config['app_name']."/";
 
-include "backend/helpers/cfg.php";
+/**
+ * @var entorno : D-> Desarrollo; P-> Produccion
+ */
+$config['entorno']= 'D';
+
+if ($config['entorno'] == 'D')
+{
+    ini_set("display_errors", true);
+    error_reporting(E_ALL);
+}elseif($config['entorno'] == 'P')
+{
+    ini_set("display_errors", false);
+    error_reporting(0);
+}
+
+/**
+* Archivo que genera constantes de file cfg.config
+*/
+include "./backend/helpers/cfg.php";
 
 if ($config['entorno'] == 'D')
 {

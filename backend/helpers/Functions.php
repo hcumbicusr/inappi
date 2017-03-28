@@ -1036,6 +1036,9 @@ public static function enviarMail($mi_mail){
     return $return;
   }
 
+/**
+* lee un archivo de texto plano y retorna un array de las lineas
+*/
   public static function readTextFile( $url_file ) {
     $file = fopen($url_file, 'r');
     $arr_file = [];
@@ -1048,4 +1051,13 @@ public static function enviarMail($mi_mail){
   }
 
 
+}
+
+/**
+* imprime el valor del val preformateado html
+*/
+function pr( $val ){
+  echo "<pre>";
+  print_r( $val );
+  echo "</pre>";
 }
