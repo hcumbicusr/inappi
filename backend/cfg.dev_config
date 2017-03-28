@@ -1,0 +1,6 @@
+; config data base
+SERVERNAME=localhost
+PORT=3306
+DATABASE=bd_prueba
+USERNAME=root
+PASSWORD=
