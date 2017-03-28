@@ -1,4 +1,4 @@
-<?php include 'backend/Config.inc.php'; global $config; ?>
+<?php include 'backend/load.php'; global $config; ?>
 <?php 
 //-------------- conexion a BD
 $class = new Database();

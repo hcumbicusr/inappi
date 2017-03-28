@@ -22,7 +22,7 @@ $config['default_timezone'] = 'America/Lima';
 /**
 * @var memory_limit : limite de memoria
 */
-$config['memory_limit'] = 'America/Lima';
+$config['memory_limit'] = '512M';
 
 date_default_timezone_set( $config['default_timezone'] );
 setlocale( LC_ALL, $config['lang'] );
