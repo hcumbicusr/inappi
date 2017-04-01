@@ -1,6 +1,6 @@
 <?php
 global $config;
-require_once ($config['path'].'backend/helpers/Functions.php');
+//require_once ($config['path'].'backend/helpers/Functions.php');
 $f = ($config['entorno']=='P')? "cfg.config" : "cfg.dev_config";
 $filename = $config['path']."backend/".$f;
 $file = Functions::readTextFile( $filename );

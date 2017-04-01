@@ -1,10 +1,10 @@
-<?php include 'backend/load.php'; global $config; ?>
+<?php require 'backend/load.php'; global $config; ?>
 <?php 
 //-------------- conexion a BD
 $class = new Database();
 $conexion = $class->selectManager();
 
-$test = $conexion->select("SELECT * FROM example");
+$test = $conexion->select("SELECT * FROM clients");
 
  ?>
 <!DOCTYPE html>

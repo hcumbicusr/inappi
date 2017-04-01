@@ -58,7 +58,7 @@ $config['site_url']='http://localhost:88/'.$config['app_name'];
 /**
  * @var path ruta raiz directorio
  */
-$config['path']="C:\wamp\www\\".$config['app_name']."/";
+$config['path']='C:\xampp\htdocs\\'.$config['app_name'].'/';
 
 /**
  * @var entorno : D-> Desarrollo; P-> Produccion
@@ -78,7 +78,7 @@ if ($config['entorno'] == 'D')
 /**
 * Archivo que genera constantes de file cfg.config
 */
-include "./backend/helpers/cfg.php";
+include $config['path']."backend/helpers/cfg.php";
 
 if ($config['entorno'] == 'D')
 {
@@ -129,8 +129,8 @@ $config['audit_table']= "sys_logs";
  * Requiere del archivo db.php para funcionar
  */
 
-require_once 'core/Database.php';
+require_once $config['path'].'backend/core/Database.php';
 /**
  * Requiere del archivo config.php para funcionar
  */
-require_once 'core/ClassConfig.php';
+require_once $config['path'].'backend/core/ClassConfig.php';
