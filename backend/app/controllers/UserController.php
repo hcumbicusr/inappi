@@ -1,16 +1,14 @@
 <?php
-require_once '../Config.inc.php';
-require_once 'Controller.php';
-require_once 'IController.php';
-
-class UsuarioController extends Controller implements IController{
-	private $table = 'usuarios';
+require_once '../load.php';
+class UserController extends Controller implements IController{
+	private $table = 'users';
 	private $conn = null;
 	private $params;
 	private $http_method;
 	private $type_search;
 	private $functionPref;
 	private $result;
+	public $is_debug = false;
 
 	public function __construct($params = array(), $http_method = 'GET') {
 		unset($params['_']);
@@ -84,15 +82,7 @@ class UsuarioController extends Controller implements IController{
 	}
 
 	public function search() {
-		if ($this->type_search == 'filtro') {
-			$condicion = 'AND';
-		}else {
-			$condicion = 'OR';
-		}
-		foreach ($this->params as $key => $value) {
-			$where[]= " `".$key."` = '".$value."'";
-		}
-		$this->result = $this->conn->select("SELECT * FROM ".$this->table." WHERE ". implode(" $condicion ", $where), true, true);
+		$this->result = $this->conn->select("SELECT * FROM ".$this->table);
 	}
 
 	public function update() {
@@ -100,6 +90,12 @@ class UsuarioController extends Controller implements IController{
 	}
 
 	public function create() {
+		global $is_debug;
+		$this->result['web'] = $this->conn->select("SELECT * FROM ".$this->table, false);
+		//$is_debug = true;
+		$this->result['app']= $this->conn->select("SELECT * FROM user_app");
+		//$this->result = ["a" => $a, "b" => $b];		
+		return true;
 		$id = $this->conn->select("SELECT id FROM usuarios WHERE username = '".$_POST['username']."' ", false);
 		if (count($id) == 0){
 			$_POST['password'] = md5($_POST['password']);
@@ -126,7 +122,7 @@ class UsuarioController extends Controller implements IController{
 	public function login() {
 		global $config;
 
-		$py_name = $config['nameApp'];
+		$py_name = $config['app_name'];
 		$actual = date("Y-m-d H:i:s");
 		$user = "";
 		$permisos = array();

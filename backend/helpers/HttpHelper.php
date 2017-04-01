@@ -21,18 +21,17 @@ class HttpHelper {
 			}
 		}else {
 			$input = file_get_contents("php://input");
-			
-				$params = $input;
-				$params .= "&";
-				do {
-					$key = substr($params, 0, strpos($params, "="));
-					$params = substr($params, strpos($params, "=") + 1);
-					$val = substr($params, 0, strpos($params, "&"));
-					$params = substr($params, strpos($params, "&") + 1);
-					$arr_params[$key] = $val;
-				}while (strpos($params, "&"));
-				//die(var_dump($arr_params));
-				$_REQUEST = $arr_params;
+			$params = $input;
+			$params .= "&";
+			do {
+				$key = substr($params, 0, strpos($params, "="));
+				$params = substr($params, strpos($params, "=") + 1);
+				$val = substr($params, 0, strpos($params, "&"));
+				$params = substr($params, strpos($params, "&") + 1);
+				$arr_params[$key] = $val;
+			}while (strpos($params, "&"));
+			//die(var_dump($arr_params));
+			$_REQUEST = $arr_params;
 		}
 	}
 	

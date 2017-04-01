@@ -4,3 +4,9 @@ PORT=3306
 DATABASE=inapp
 USERNAME=root
 PASSWORD=
+; conexion para otra base de datos
+SERVERNAME_2=
+PORT_2=
+DATABASE_2=
+USERNAME_2=
+PASSWORD_2=

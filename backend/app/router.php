@@ -1,5 +1,5 @@
 <?php
-require_once '../helpers/HttpHelper.php';
+require_once '../load.php';
 header('Access-Control-Allow-Origin: *');  
 header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT, OPTIONS");
 //die(var_dump($_POST));
@@ -50,9 +50,10 @@ if ( $aux_controller !== false ){ // valido con los auxiliares => plural
 // valida terminos en plural
 function pluralControllers($controller) {
 	$arr = [
-		"producto" => "productos",
+		"producto" 	=> "productos",
 		"categoria" => "categorias",
-		"usuario" => "usuarios"
+		"usuario" 	=> "usuarios",
+		$controller => $controller."s"
 	];
 
 	if (in_array($controller, $arr)) {

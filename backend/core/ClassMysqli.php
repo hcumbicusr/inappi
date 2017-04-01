@@ -47,6 +47,7 @@ class ClassMysqli implements IDatabase{
        
     public function connect($database = null){
         global $config;
+        global $is_debug;
         //die(var_dump($database));
         //$con = null;
         $this->audit = $config['auditable'];
@@ -102,12 +103,14 @@ class ClassMysqli implements IDatabase{
         return $val;    
     }
     
-    public function select($query, $close = true, $test = false){
-        if($test) {
+    public function select($query, $close = true){
+        global $is_debug;
+
+        if($is_debug) {
             $this->close();
-            die(var_dump($query)); 
+            pr( $query );  return;
         }
-        //die(var_dump($query));
+        //pr( $query );
         $consult = $this->con->query($query);  
         $data = NULL;
         //die(var_dump($consult));
@@ -130,8 +133,10 @@ class ClassMysqli implements IDatabase{
         return $data;
     }        
     
-    public function insert($arr, $close = true, $test = false) {
-        $obj = new ClassMysqli();
+    public function insert($arr, $close = true) {
+        global $is_debug;
+
+        //$obj = new ClassMysqli();
 
         $result = false;
         $query = "INSERT INTO TABLE_NAME (`".implode("`, `", array_keys($arr))."`) VALUES ('".implode("', '", $arr)."')";
@@ -139,21 +144,20 @@ class ClassMysqli implements IDatabase{
         $query = str_replace("'default'", "default", $query);
         $query = str_replace("'curdate()'", "curdate()", $query);
         $query = str_replace("'null'", "null", $query);
-        $obj->query = $query;
-        $obj->isClose = $close;
-        $obj->isTest = $test;
-        $obj->con = $this->con;
-
-        return $obj;        
+        $this->query = $query;
+        $this->isClose = $close;
+        $this->isTest = $is_debug;
+        //$obj->con = $this->con;
+        //return $obj;        
     }
 
     public function inTable($table) {
         $this->query = str_replace('TABLE_NAME', $table, $this->query );
         if($this->isTest) {
             $this->close();
-            die(var_dump($this->query)); 
+            pr( $this->query ); return;
         }
-        //die(var_dump($query));
+        //pr( $query );
         if (!($stmt = $this->con->prepare($this->query)))
         {            
             //echo "Fallo en la preparacion sentencia : ( ".$con->errno." ) ".$con->error;
@@ -184,12 +188,14 @@ class ClassMysqli implements IDatabase{
 
     }
 
-    public function update($query, $close = true, $test = false) {
+    public function update($query, $close = true) {
+        global $is_debug;
+
         $result = false;
         //return $query;
-        if($test) {
+        if($is_debug) {
             $this->close();
-            die(var_dump($query)); 
+            pr( $query );  return;
         }
         if (!($stmt = $this->con->prepare($query)))
         {
@@ -219,11 +225,13 @@ class ClassMysqli implements IDatabase{
         }
         return $result;
     }
-    public function delete($query, $close = true, $test = false) {
+    public function delete($query, $close = true) {
+        global $is_debug;
+
         $result = false;
-        if($test) {
+        if($is_debug) {
             $this->close();
-            die(var_dump($query)); 
+            pr( $query );  return;
         }
         if (!($stmt = $this->con->prepare($query)))
         {
@@ -255,7 +263,9 @@ class ClassMysqli implements IDatabase{
     }
 
 
-    public function spSelect($procedure, $input = array(), $close = true, $test = false) {   
+    public function spSelect($procedure, $input = array(), $close = true) {  
+        global $is_debug;
+
         if (empty($input))
         {
             $sp = "CALL $procedure()";
@@ -266,9 +276,9 @@ class ClassMysqli implements IDatabase{
         }
         
         // solo si se solicita test
-        if ($test){
+        if ($is_debug){
             $this->close();
-            die(var_dump($sp));
+            pr( $sp ); return;
         }
         
         
@@ -302,7 +312,9 @@ class ClassMysqli implements IDatabase{
         return $data;
     }
     
-    public function spInsert($procedure, $input = array(), $output = true, $close = true, $test = false) {                        
+    public function spInsert($procedure, $input = array(), $output = true, $close = true) {                        
+        global $is_debug;
+
         $data = ""; //Salida
         $ret = false; //verifica si se ejecutó correctamente el sp
         
@@ -311,10 +323,9 @@ class ClassMysqli implements IDatabase{
             //die(var_dump("CALL $procedure($input,@salida); SELECT @salida;"));
             // solo si se solicita test
             $sp = "CALL $procedure('".implode("', '", $input)."', @salida); SELECT @salida;";
-            if ($test){
+            if ($is_debug){
                 $this->close();
-                die(var_dump($sp));
-                //return $sp;
+                pr( $sp ); return;
             }
 
             $consult = $this->con->multi_query($sp);
@@ -352,9 +363,9 @@ class ClassMysqli implements IDatabase{
             //die(var_dump("CALL $procedure($input)"));
             // solo si se solicita test
             $sp = "CALL $procedure('".implode("', '", $input)."')";
-            if ($test){
+            if ($is_debug){
                 $this->close();
-                die(var_dump($sp));
+                pr( $sp ); return;
             }
             if(!$this->con->multi_query($sp))
             {
@@ -378,9 +389,11 @@ class ClassMysqli implements IDatabase{
     }
 
     public function auditable($query, $success) {
+        global $is_debug;
+
         if ( $this->is_session_started() === FALSE ) session_start();
             $sql = "INSERT INTO ".$this->audit_table." (usuario,sql_,sql_success,ip,host,browser) VALUES(";
-            $sql .= "'".$_SESSION['username']."', ";
+            $sql .= "'".$_REQUEST['username']."', ";
             $sql .= "\"".$query."\", ";
             $sql .= " ".$success.", ";
             $sql .= "'".$_SERVER['REMOTE_ADDR']."', ";
@@ -388,7 +401,7 @@ class ClassMysqli implements IDatabase{
             $sql .= " '' ";
             $sql .= ")";
             //die(var_dump($sql));
-            $this->con->query($sql);
+            if ( !$is_debug )  $this->con->query($sql);
     }
 
     /**

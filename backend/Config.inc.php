@@ -80,33 +80,28 @@ if ($config['entorno'] == 'D')
 */
 include $config['path']."backend/helpers/cfg.php";
 
-if ($config['entorno'] == 'D')
-{
-    /**
-    * @var accessBD n1 default
-    */
-   $config['access_bd'] = array(
-       "host" => SERVERNAME,
-       "port" => PORT,
-       "db" => DATABASE,
-       "user" => USERNAME,
-       "pass" => PASSWORD
-   );
+/**
+* @var accessBD n1 default
+*/
+$config['access_bd'] = array(
+   "host" => SERVERNAME,
+   "port" => PORT,
+   "db" => DATABASE,
+   "user" => USERNAME,
+   "pass" => PASSWORD
+);
+
+/**
+* @var accessBD n2
+*/
+$config['access_bd_2'] = array(
+   "host" => SERVERNAME_2,
+   "port" => PORT_2,
+   "db" => DATABASE_2,
+   "user" => USERNAME_2,
+   "pass" => PASSWORD_2
+);
    
-}elseif($config['entorno'] == 'P')
-{
-    /**
-    * @var accessBD n1
-    */
-   $config['access_bd'] = array(
-       "host" => SERVERNAME,
-       "port" => PORT,
-       "db" => DATABASE,
-       "user" => USERNAME,
-       "pass" => PASSWORD
-   );
-   
-}
 
 /**
  * @var management
