@@ -103,7 +103,7 @@ class ClassMysqli implements IDatabase{
         return $val;    
     }
     
-    public function select($query, $close = true){
+    public function select($query, $close = false){
         global $is_debug;
 
         if($is_debug) {
@@ -133,10 +133,9 @@ class ClassMysqli implements IDatabase{
         return $data;
     }        
     
-    public function insert($arr, $close = true) {
+    public function insert($arr, $close = false) {
+        $obj = new ClassMysqli();
         global $is_debug;
-
-        //$obj = new ClassMysqli();
 
         $result = false;
         $query = "INSERT INTO TABLE_NAME (`".implode("`, `", array_keys($arr))."`) VALUES ('".implode("', '", $arr)."')";
@@ -144,11 +143,11 @@ class ClassMysqli implements IDatabase{
         $query = str_replace("'default'", "default", $query);
         $query = str_replace("'curdate()'", "curdate()", $query);
         $query = str_replace("'null'", "null", $query);
-        $this->query = $query;
-        $this->isClose = $close;
-        $this->isTest = $is_debug;
-        //$obj->con = $this->con;
-        //return $obj;        
+        $obj->query = $query;
+        $obj->isClose = $close;
+        $obj->isTest = $is_debug;
+        $obj->con = $this->con;
+        return $obj;        
     }
 
     public function inTable($table) {
@@ -188,7 +187,7 @@ class ClassMysqli implements IDatabase{
 
     }
 
-    public function update($query, $close = true) {
+    public function update($query, $close = false) {
         global $is_debug;
 
         $result = false;
@@ -225,7 +224,7 @@ class ClassMysqli implements IDatabase{
         }
         return $result;
     }
-    public function delete($query, $close = true) {
+    public function delete($query, $close = false) {
         global $is_debug;
 
         $result = false;
@@ -263,7 +262,7 @@ class ClassMysqli implements IDatabase{
     }
 
 
-    public function spSelect($procedure, $input = array(), $close = true) {  
+    public function spSelect($procedure, $input = array(), $close = false) {  
         global $is_debug;
 
         if (empty($input))
@@ -312,7 +311,7 @@ class ClassMysqli implements IDatabase{
         return $data;
     }
     
-    public function spInsert($procedure, $input = array(), $output = true, $close = true) {                        
+    public function spInsert($procedure, $input = array(), $output = true, $close = false) {                        
         global $is_debug;
 
         $data = ""; //Salida
@@ -390,18 +389,20 @@ class ClassMysqli implements IDatabase{
 
     public function auditable($query, $success) {
         global $is_debug;
+        global $db;
+        global $config;
 
-        if ( $this->is_session_started() === FALSE ) session_start();
-            $sql = "INSERT INTO ".$this->audit_table." (usuario,sql_,sql_success,ip,host,browser) VALUES(";
-            $sql .= "'".$_REQUEST['username']."', ";
-            $sql .= "\"".$query."\", ";
-            $sql .= " ".$success.", ";
-            $sql .= "'".$_SERVER['REMOTE_ADDR']."', ";
-            $sql .= "\"".gethostbyaddr($_SERVER['REMOTE_ADDR'])."\", ";
-            $sql .= " '' ";
-            $sql .= ")";
-            //die(var_dump($sql));
-            if ( !$is_debug )  $this->con->query($sql);
+        //if ( $this->is_session_started() === FALSE ) session_start();
+        $sql = "INSERT INTO ".$this->audit_table." (usuario,sql_,sql_success,ip,host,browser) VALUES(";
+        $sql .= "'".$_REQUEST['username']."', ";
+        $sql .= "\"".$query."\", ";
+        $sql .= " ".$success.", ";
+        $sql .= "'".$_SERVER['REMOTE_ADDR']."', ";
+        $sql .= "\"".$_SERVER['REMOTE_ADDR']."\", ";
+        $sql .= " '' ";
+        $sql .= ")";
+        //die(var_dump($sql));
+        if ( !$is_debug )  $db->query($sql);
     }
 
     /**

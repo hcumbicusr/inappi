@@ -1050,13 +1050,101 @@ public static function enviarMail($mi_mail){
     return $arr_file;
   }
 
+  public static function UID( $key = "" ){
+    date_default_timezone_set("UTC");
+    $Uid=hash( "sha256" , $key . (string)microtime() );
+    return $Uid;
+  }
 
+  public static function encrypt( $string, $key ) {
+     srand((double) microtime() * 1000000); //for sake of MCRYPT_RAND
+     $key = md5($key); //to improve variance
+    /* Open module, and create IV */
+    $td = mcrypt_module_open('des', '','cfb', '');
+    $key = substr($key, 0, mcrypt_enc_get_key_size($td));
+    $iv_size = mcrypt_enc_get_iv_size($td);
+    $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+    /* Initialize encryption handle */
+     if (mcrypt_generic_init($td, $key, $iv) != -1) {
+
+        /* Encrypt data */
+        $c_t = mcrypt_generic($td, $string);
+        mcrypt_generic_deinit($td);
+        mcrypt_module_close($td);
+         $c_t = $iv.$c_t;
+         return $c_t;
+     } //end if
+  }
+
+  public static function decrypt( $string, $key ) {
+     $key = md5($key); //to improve variance
+    /* Open module, and create IV */
+    $td = mcrypt_module_open('des', '','cfb', '');
+    $key = substr($key, 0, mcrypt_enc_get_key_size($td));
+    $iv_size = mcrypt_enc_get_iv_size($td);
+    $iv = substr($string,0,$iv_size);
+    $string = substr($string,$iv_size);
+    /* Initialize encryption handle */
+     if (mcrypt_generic_init($td, $key, $iv) != -1) {
+
+        /* Encrypt data */
+        $c_t = mdecrypt_generic($td, $string);
+        mcrypt_generic_deinit($td);
+        mcrypt_module_close($td);
+         return $c_t;
+     } //end if
+  }
+
+
+}
+
+/**
+* OBTIENE EL CORRELATIVO SIGUIENTE DE LA TABLA
+*@var table_name NOMBRE DE LA TABLA
+*/
+function getCodeTable( $table_name ) {
+  global $db;
+  global $is_debug;
+  
+  $select = $db->select("SELECT prefix, (current+1) current, concat(prefix, (current+1)) current_code  FROM system_tables WHERE table_name = '$table_name' AND active = '1' ");
+  
+  if (!empty($select)) return $select[0];
+  else return null;
+}
+/**
+* actualiza el correlativo de la tabla
+*@var table_name NOMBRE DE LA TABLA
+*@var new_current nuevo correlativo actual
+*/
+function updateCodeTable( $table_name , $new_current ) {
+  global $db;
+  $update = $db->update("UPDATE system_tables SET current = '$new_current', updated_at = now()  WHERE table_name = '$table_name' ");
+  return $update;
+}
+
+/**
+* Evalua el result de una consulta mysql
+* @var mysql_result result de la consulta mysql
+*/
+function evalResultQuery( $mysql_result ) {
+  global $db;
+  if ( $mysql_result === false )
+    {
+        //throw new Exception( mysqli_error( $conexion ) );
+        mysqli_rollback( $db );
+        mysqli_close( $db );
+        //die();
+        return false;
+    } else {
+      return true;
+    }
 }
 
 /**
 * imprime el valor del val preformateado html
 */
 function pr( $val ){
+  header('Content-Type: text/html; charset=UTF-8');
   echo "<pre>";
   print_r( $val );
   echo "</pre>";

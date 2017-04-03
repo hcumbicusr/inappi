@@ -114,11 +114,18 @@ $config['database_manager']="mysqli";
 $config['session_time']= 2400;
 
 /**
+ * @var directory_tree ruta del arbol de directorios interno de la applicación
+ */
+$config['directory_tree'] = $config['path']."backend/app/directory_tree/";
+
+/**
  * @var auditable = true : registra todas las transacciones sql en una tabla auditoria en la bd 
  * @var auditable = false:  obvia el registro de transacciones sql
  */
 $config['auditable']= false;
 $config['audit_table']= "sys_logs";
+
+$config['require_session'] = true;
 
 /**
  * Requiere del archivo db.php para funcionar
