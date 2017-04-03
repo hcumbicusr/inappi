@@ -9,6 +9,10 @@
 
 <br>
 
+<?php
+$arr = ["a" => "1", "b" => "2"];
+?>
+
 <form method="delete" action="local">
 	<?php $n = empty($_REQUEST['n'])? 1 : $_REQUEST['n']; ?>
 	<h2>function -delete</h2>
@@ -16,6 +20,13 @@
 	<input type="text" name="is_sa" placeholder="is_sa" value="1">
 	<input type="text" name="function" placeholder="function" value="delete">
 	<input type="submit" value="Borrar">
+</form>
+
+<form method="get" action="local">
+	<h2>GET Structure Local</h2>
+	<input type="text" name="token" placeholder="Token" value="d2678c1ede1b0202c4443159c30479a421ef9decb5e27582f876260aaf6d437e">
+	<input type="text" name="function" placeholder="function" value="getStructure">
+	<input type="submit" value="STRUCTURE">
 </form>
 
 <form method="get" action="local">

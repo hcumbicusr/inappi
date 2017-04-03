@@ -45,6 +45,7 @@ if ( $config['require_session'] ) {
 		if ( empty($current_user['type']) ) {
 			$_REQUEST['function'] = $real_func;
 			//pr( "callController( $controller, ".implode( '-', $controllersName).", $method )" ) ;
+			unset($_REQUEST['token']);
 			$return = callController( $controller, $controllersName, $method );
 			//pr ( $return );
 		} else {

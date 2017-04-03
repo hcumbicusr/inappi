@@ -108,7 +108,7 @@ class SessionController extends Controller implements IController
 		$columns = "`".implode("`,`", $this->columns)."`";
 		//$is_debug = true;
 		$session = $db->select( "SELECT $columns FROM $this->table WHERE token = '$token' AND active = 1" );
-		//pr ($session);
+		//die();
 		if ( !empty( $session ) ) {
 			$session = $session[0];
 			$query = "SELECT tbl.* ";
@@ -116,6 +116,7 @@ class SessionController extends Controller implements IController
 				$query.= " , s.dni, s.ruc, s.names, s.surnames, s.gender, s.email, s.birthdate, s.phone, s.address, s.url_photo ";
 				$query.= " , st.name as staff_type ";
 			}
+			$query.= " , '".$session['table_name']."' user_type ";
 			$query.= " FROM ".$session['table_name']." tbl ";
 			if ( $session['table_name'] == 'user' ) {
 				$query.= " INNER JOIN staff s ON tbl.staff_id = s.id ";

@@ -12,21 +12,19 @@ class LocalController extends Controller implements IController
 	private $type_search;
 	private $functionPref;
 	private $result;
-	private $is_sa;
 
 	public function __construct($params = array(), $http_method = 'GET') {
 		unset($params['_']);
 		$this->params 		= $params;
 		$this->http_method 	= $http_method;
-		$this->functionPref = empty($params['function']) ? null : $params['function'];
-
+		$this->functionPref = empty($this->params['function']) ? null : $this->params['function'];
+		if (in_array("function", array_keys($params))) { unset($this->params['function']); }
 		//-------------- conexion a BD
 		global $db;
 		//_------------- model
 		$this->class = new $this->model();
 		$this->table = $this->class->table;
 		$this->columns = $this->class->columns;
-		$this->is_sa = empty($this->params['is_sa'])? false : boolval($this->params['is_sa']);
 
 		//die(var_dump($params));
 
@@ -39,7 +37,6 @@ class LocalController extends Controller implements IController
 			 			$this->search();
 			 		}
 		 		} else {
-		 			unset($this->params['function']);
 		 			call_user_func(array($this,$this->functionPref));
 		 		}
 		 		break;
@@ -47,7 +44,6 @@ class LocalController extends Controller implements IController
 		 		if (empty($this->functionPref)) {
 			 		$this->create();
 		 		} else {
-		 			unset($this->params['function']);
 		 			call_user_func(array($this,$this->functionPref));
 		 		}
 		 		break;
@@ -55,7 +51,6 @@ class LocalController extends Controller implements IController
 		 		if (empty($this->functionPref)) {
 			 		$this->update();
 		 		} else {
-		 			unset($this->params['function']);
 		 			call_user_func(array($this,$this->functionPref));
 		 		}
 		 		break;
@@ -63,7 +58,6 @@ class LocalController extends Controller implements IController
 		 		if (empty($this->functionPref)) {
 			 		$this->delete();
 		 		} else {
-		 			unset($this->params['function']);
 		 			call_user_func(array($this,$this->functionPref));
 		 		}
 		 		break;
@@ -76,7 +70,6 @@ class LocalController extends Controller implements IController
 			 			$this->search();
 			 		}
 		 		} else {
-		 			unset($this->params['function']);
 		 			call_user_func(array($this,$this->functionPref));
 		 		}
 		 		break;
@@ -87,7 +80,9 @@ class LocalController extends Controller implements IController
 
 	public function index() {
 		global $db;
-		if($this->is_sa){
+		global $current_user;
+		$user_type = $current_user['user_type'];
+		if($user_type == 'super_user'){
 			$this->result = $db->select("SELECT * FROM $this->table");
 		} else {
 			$this->result = $db->select("SELECT * FROM $this->table WHERE deleted = 0 AND active = 1 ");
@@ -96,10 +91,47 @@ class LocalController extends Controller implements IController
 
 	public function search() {
 		global $db;
-		if($this->is_sa){
-			$this->result = $db->select("SELECT * FROM $this->table");
+		global $current_user;
+		$user_type = $current_user['user_type'];
+		$condition = "OR";
+		$operator = "=";
+
+		//pr($this->params);
+
+		if ( !empty($this->params['condition'])){
+			$condition = strtoupper( $this->params['condition'] );
+			unset($this->params['condition']);
+		}
+		if ( !empty($this->params['operator'])){
+			$operator = strtoupper( $this->params['operator'] );
+			unset($this->params['operator']);
+		}
+
+		$search = "SELECT $this->table.*, local_type.name local_type, district.name district, province.name province, department.name department, country.name country ";
+		$search.= " FROM $this->table ";
+		$search.= " LEFT JOIN local_type ON $this->table.local_type_id = local_type.id ";
+		$search.= " LEFT JOIN district ON $this->table.district_id = district.id ";
+		$search.= " LEFT JOIN province ON district.province_id = province.id ";
+		$search.= " LEFT JOIN department ON province.department_id = department.id ";
+		$search.= " LEFT JOIN country ON department.country_id = country.id ";
+
+		$search.= " WHERE 1=1 ";
+		if ( !empty($this->params) ) {
+			$search_ = [];
+			foreach ($this->params as $key => $value) {
+				if ( $operator != 'LIKE' ) {
+					$search_[]= $key . " $operator '" . $value . "'";
+				} else {
+					$search_[]= $key . " $operator '%" . $value . "%'";
+				}
+			}
+			$search.=" AND ( ". implode(" $condition ", $search_) ." ) " ;
+		}
+		//pr( $search );
+		if($user_type == 'super_user'){
+			$this->result = $db->select( $search );
 		} else {
-			$this->result = $db->select("SELECT * FROM $this->table WHERE deleted = 0 AND active = 1 ");
+			$this->result = $db->select( $search." AND deleted = 0 AND active = 1 ");
 		}
 	}
 
@@ -233,6 +265,12 @@ class LocalController extends Controller implements IController
 				break;
 		}
 		$this->result = $message;
+	}
+
+	public function getStructure(){
+		global $db;
+		global $config;
+		$this->result = $this->class->structure;
 	}
 
 	//--------------------------- fin funciones personalizadas --------------------------------------------------
