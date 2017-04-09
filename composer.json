@@ -1,0 +1,21 @@
+{
+	"name":        "hcumbicusr/inappi",
+    "description": "API for inappi PHP project",
+    "version":     "1.0.0",
+    "type":        "API",
+    "keywords":    ["google", "places", "api"],
+    "homepage":    "https://github.com/hcumbicusr/inappi",
+    "license":     "MIT",
+    "authors": [{
+        "name":     "Henry Cumbicus",
+        "email":    "hcumbicusr@gmail.com",
+        "homepage": "http://twitter.com/hcumbicusr"
+    }],
+    "require": {
+        "php": ">=5.4.0",
+        "joshtronic/php-googleplaces": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {"app\\": "backend/"}
+    }
+}

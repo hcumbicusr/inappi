@@ -9,7 +9,10 @@ class Local {
 
 	public function __construct(){
 		global $db;
-		$this->structure = $db->select("desc $this->table");
-		//pr($this->structure);
+		global $config;
+		if ($config['entorno'] == 'D')
+			$this->structure = $db->select("desc $this->table");
+		else
+			$this->structure = ['type' => 'error', 'message' => 'El proyecto ya está publicado, por motivos de seguridad no se puede responder la solicitud.'];
 	}
 }

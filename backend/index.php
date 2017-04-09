@@ -10,6 +10,9 @@
 <br>
 
 <?php
+$index = "jola";
+${"var_".$index} = "esto es cool";
+echo $var_jola;
 $arr = ["a" => "1", "b" => "2"];
 ?>
 
@@ -24,27 +27,27 @@ $arr = ["a" => "1", "b" => "2"];
 
 <form method="get" action="local">
 	<h2>GET Structure Local</h2>
-	<input type="text" name="token" placeholder="Token" value="d2678c1ede1b0202c4443159c30479a421ef9decb5e27582f876260aaf6d437e">
+	<input type="text" name="token" placeholder="Token" value="b4f4b54b81e36ac75bb35e1bc816736f828e0f57af30d0d1dbbd796ce290d8d0">
 	<input type="text" name="function" placeholder="function" value="getStructure">
 	<input type="submit" value="STRUCTURE">
 </form>
 
 <form method="get" action="local">
 	<h2>GET Local</h2>
-	<input type="text" name="token" placeholder="Token" value="d2678c1ede1b0202c4443159c30479a421ef9decb5e27582f876260aaf6d437e">
+	<input type="text" name="token" placeholder="Token" value="b4f4b54b81e36ac75bb35e1bc816736f828e0f57af30d0d1dbbd796ce290d8d0">
 	<input type="submit" value="Enviar">
 </form>
 
 <form method="post" action="session">
 	<h2>Finalizar sesión</h2>
-	<input type="text" name="token" placeholder="Token" value="d2678c1ede1b0202c4443159c30479a421ef9decb5e27582f876260aaf6d437e"><br>
+	<input type="text" name="token" placeholder="Token" value="b4f4b54b81e36ac75bb35e1bc816736f828e0f57af30d0d1dbbd796ce290d8d0"><br>
 	<input type="text" name="function" placeholder="function" value="destroy">
 	<input type="submit" value="DESTROY">
 </form>
 
 <form method="get" action="session">
 	<h2>GET SESSION</h2>
-	<input type="text" name="token" placeholder="Token" value="d2678c1ede1b0202c4443159c30479a421ef9decb5e27582f876260aaf6d437e">
+	<input type="text" name="token" placeholder="Token" value="b4f4b54b81e36ac75bb35e1bc816736f828e0f57af30d0d1dbbd796ce290d8d0">
 	<input type="submit" value="CURRENT USER">
 </form>
 
@@ -62,7 +65,7 @@ $arr = ["a" => "1", "b" => "2"];
 <form method="post" action="local">
 	<h2>POST</h2>
 	<?php $n = empty($_REQUEST['n'])? 1 : $_REQUEST['n']; ?>
-	<input type="text" name="token" placeholder="Token" value="d2678c1ede1b0202c4443159c30479a421ef9decb5e27582f876260aaf6d437e">
+	<input type="text" name="token" placeholder="Token" value="b4f4b54b81e36ac75bb35e1bc816736f828e0f57af30d0d1dbbd796ce290d8d0">
 	<input type="text" name="title" placeholder="title" value="title <?php echo $n; ?>"> <br>
 	<input type="text" name="business_name" placeholder="business_name" value="business_name <?php echo $n; ?>"> <br>
 	<input type="text" name="ruc" placeholder="ruc" value="2010101010<?php echo $n; ?>"> <br>

@@ -155,7 +155,7 @@ class SessionController extends Controller implements IController
 			$table = $this->params['type'];
 			$username = $this->params['username'];
 			$password = $this->params['password'];
-			$user_column = ($table=='user')? 'username' : 'email';
+			$user_column = ($table=='user'||$table=='super_user')? 'username' : 'email';
 			
 
 			$user = $db->select( "SELECT password FROM $table  WHERE $user_column = '$username' " );
@@ -171,7 +171,7 @@ class SessionController extends Controller implements IController
 			$query =  "SELECT * FROM $table  WHERE $user_column = '$username' AND  " ;
 			$query.=  " ( " ;
 			$query.= ( password_verify( $key_user . $password , $password_u )? 1 : 0 ) ."=1";
-			if ( $table != 'user' ) {
+			if ( $table != 'user' && $table != 'super_user' ) {
 				$query.=  " OR ID_FB = '".$this->params['ID_FB']."'  " ;
 				$query.=  " OR ID_GG = '".$this->params['ID_GG']."'  " ;
 			}
@@ -212,8 +212,9 @@ class SessionController extends Controller implements IController
 		global $current_user;
 		global $config;
 		global $db;
+		global $token;
 		//die(var_dump($_REQUEST));
-		$token = $this->params['token'];
+		//$token = $this->params['token'];
 		$destroy = $db->update("UPDATE $this->table SET active = 0 , destroy_session = now() WHERE token = '$token' ");
 		if ($destroy) {
 			$current_user = null;

@@ -1,12 +1,7 @@
 <?php
-/**
-* 
-*/
-class Session
-{
-	public $table = "session";
-	public $columns = ['id', 'token', 'active', 'start_session', 'destroy_session', 'user_id', 'table_name'];
-
+class _MODEL_ {
+	public $table = "_TABLE_";
+	public $columns = ["id","active","created_at","updated_at"];
 	public $structure = [];
 
 	public function __construct(){
@@ -17,5 +12,4 @@ class Session
 		else
 			$this->structure = ['type' => 'error', 'message' => 'El proyecto ya está publicado, por motivos de seguridad no se puede responder la solicitud.'];
 	}
-
 }
