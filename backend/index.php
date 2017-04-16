@@ -5,6 +5,17 @@
 </head>
 <body>
 
+<br>
+<br>
+<form action="place">
+	<input type="text" name="token" value="b4f4b54b81e36ac75bb35e1bc816736f828e0f57af30d0d1dbbd796ce290d8d0"><br>
+	<input type="submit" value="PLACES">
+</form>
+<br>
+<br>
+<br>
+
+
 <a href="productos/"> Todos los productos</a>
 
 <br>

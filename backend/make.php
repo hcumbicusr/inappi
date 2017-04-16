@@ -50,7 +50,7 @@ function make_controller( $vars )
 	if ( $success !== false ) {
 		$vars['table']	= $table;
 		$vars['model']	= $model;
-		echo "Controller: ".$controller." creado exitosamente!\n";
+		print_r( "Controller: ".$controller." creado exitosamente!\n" );
 		make_model( $vars );
 	} else {
 		echo "[Make_Controller] Ocurrió un error!!\n";
@@ -70,6 +70,7 @@ function make_model( $vars )
 	$success 		= file_put_contents( $file_name , $file_content);
 	if ( $success !== false ) {
 		echo "Model: ".$model." creado exitosamente!\n";
+		_table( $model );
 	} else {
 		echo "[Make_Model] Ocurrió un error!!\n";
 	}
@@ -100,8 +101,10 @@ function delete_file( $vars )
 	} else {
 		echo "Controller not found!!\n";
 	}
+	$delete_model_ = $delete_model;
 	$delete_model = DIR_MODEL.ucfirst($delete_model.".php");
 	if ( file_exists( $delete_model ) ) {
+		_table( $delete_model_ , 'drop');
 		$model 		= unlink($delete_model);
 		if ( $model != false ) {
 			echo "Model: ".$delete_model.".php Eliminado!!\n";
@@ -110,6 +113,29 @@ function delete_file( $vars )
 		}
 	} else {
 		echo "Model not found!!\n";
+	}
+}
+
+function _table( $model_name , $option = 'create' )
+{
+	//echo "create_table $model_name \n";
+	require_once 'load.php';
+	include_once PATH."database".DIRECTORY_SEPARATOR."DatabaseModel.php";
+	require_once DIR_MODEL.$model_name.".php";
+	$model = new $model_name();
+	//print_r($model);
+	$obj = new DatabaseModel( $model );
+	if ($option == 'create') {
+		$rest = $obj->createTable();
+		$aux = "creada";
+	} else {
+		$rest = $obj->dropTable();
+		$aux = "eliminada";
+	}
+	if ($rest === true) {
+		echo "Tabla $model->table $aux correctamente. \n";
+	} else {
+		echo "Ocurrió un error al $aux la tabla $model->table . \n";
 	}
 }
 

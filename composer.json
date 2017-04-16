@@ -16,6 +16,9 @@
         "joshtronic/php-googleplaces": "dev-master"
     },
     "autoload": {
-        "psr-4": {"app\\": "backend/"}
+        "psr-4": {
+            "app\\": "backend/",
+            "joshtronic\\": "vendor/joshtronic/php-googleplaces/src/"
+        }
     }
 }

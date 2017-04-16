@@ -1,7 +1,7 @@
 <?php
-class _MODEL_ {
-	public $table = "_TABLE_";
-	public $columns = ["id","name","deleted","active","created_at","updated_at"];
+class Place {
+	public $table = "place";
+	public $columns = ["id","active","created_at","updated_at"];
 	public $structure = [];
 
 	public function __construct(){

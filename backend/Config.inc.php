@@ -1,11 +1,18 @@
 <?php
+global $config;
+//$header =  !empty($argv['header'])? $argv['header'] : true;
 /**
  * Este archivo contiene las variables de configuracion de la aplicacion
  * @author Henry Cumbicus <hcumbicusr@gmail.com>
  * @package 
  * @subpackage 
 */
-header('Content-Type: text/html; charset=UTF-8');
+// if ($header === true){
+//   //header('Content-Type: text/html; charset=UTF-8');
+// } elseif ($header === false) {
+// } else {
+//   //header($header);
+// }
 
 /**
  * @var charset
@@ -126,6 +133,8 @@ $config['auditable']= false;
 $config['audit_table']= "sys_logs";
 
 $config['require_session'] = true;
+
+$config['GOOGLE_API_KEY'] = 'AIzaSyBf_7do1ZyE3zLMCe5p0HD9_nd-k8U1gLU';
 
 /**
  * Requiere del archivo db.php para funcionar

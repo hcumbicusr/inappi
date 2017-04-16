@@ -11,6 +11,7 @@ require_once $path."backend/app/controllers/IController.php";
 global $db;
 global $key_token;
 global $key_user;
+global $config;
 if (empty($db)) {
 	$class = new Database();
 	$db = $class->selectManager();

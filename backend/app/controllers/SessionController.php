@@ -228,7 +228,7 @@ class SessionController extends Controller implements IController
 
 	// utilizando metodo heredado
 	public function response($type = 'json') {
-		if ($type = 'json') {
+		if ($type == 'json') {
 			return parent::responseJson($this->result);
 		}else {
 			return parent::response($this->result);

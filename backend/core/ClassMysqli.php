@@ -387,6 +387,14 @@ class ClassMysqli implements IDatabase{
 
     }
 
+    public function tquery( $sql, $close = false ) {
+        global $is_debug;
+        if ($is_debug) {
+            pr( $sql ) ; return;
+        }
+        return $this->con->query($sql);
+    }
+
     public function auditable($query, $success) {
         global $is_debug;
         global $db;

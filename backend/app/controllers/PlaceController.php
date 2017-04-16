@@ -1,9 +1,11 @@
 <?php 
 require_once '../load.php';
-require_once 'models/_MODEL_.php';
-class _CONTROLLER_Controller extends Controller implements IController
+require_once 'models/Place.php';
+require_once '../../vendor/joshtronic/php-googleplaces/src/GooglePlaces.php';
+require_once '../../vendor/joshtronic/php-googleplaces/src/GooglePlacesClient.php';
+class PlaceController extends Controller implements IController
 {
-	private $model = '_MODEL_';
+	private $model = 'Place';
 	private $class;
 	private $table;
 	private $columns;
@@ -87,7 +89,16 @@ class _CONTROLLER_Controller extends Controller implements IController
 		global $token;
 		global $is_debug;
 
-		$this->result = $db->select("SELECT * FROM $this->table WHERE active = 1 ");
+		$google_places = new joshtronic\GooglePlaces( $config['GOOGLE_API_KEY'] );
+		$google_places->location = [ strval( $this->params['latitude'] ),  strval( $this->params['longitude'] ) ];
+		$google_places->radius   = !empty($this->params['radius'])? $this->params['radius'] : 800;
+		$google_places->rankby   = !empty($this->params['rankby'])? $this->params['rankby'] : 'prominence';
+		$google_places->keyword  = !empty($this->params['keyword'])? $this->params['keyword'] : '';
+		$google_places->types    = !empty($this->params['types'])? $this->params['types'] : '';
+		$google_places->name     = !empty($this->params['name'])? $this->params['name'] : '';
+		$results                 = $google_places->nearbySearch();
+
+		$this->result = ["P1" => $results];
 	}
 
 	public function search() {
@@ -97,7 +108,19 @@ class _CONTROLLER_Controller extends Controller implements IController
 		global $token;
 		global $is_debug;
 
-		$this->result = ['message' => 'Sin implementar'];
+		$google_places = new joshtronic\GooglePlaces( $config['GOOGLE_API_KEY'] );
+		$google_places->location = [ strval( $this->params['latitude'] ),  strval( $this->params['longitude'] ) ];
+		$google_places->radius   = !empty($this->params['radius'])? $this->params['radius'] : 800;
+		$google_places->rankby   = !empty($this->params['rankby'])? $this->params['rankby'] : 'prominence'; //prominence - distance
+		$google_places->keyword  = !empty($this->params['keyword'])? $this->params['keyword'] : '';
+		$google_places->types    = !empty($this->params['types'])? $this->params['types'] : '';
+		$google_places->name     = !empty($this->params['name'])? $this->params['name'] : '';
+		$results                 = $google_places->nearbySearch();
+		print_r(  $results );
+		die();
+		die(var_dump(gettype($results)));
+
+		$this->result = ["P1" => $results];
 	}
 
 	public function update() {
@@ -117,7 +140,7 @@ class _CONTROLLER_Controller extends Controller implements IController
 		global $token;
 		global $is_debug;
 
-		$this->result = ['message' => 'Sin implementar'];
+		$this->result = ['message' => 'Sin implementar create'];
 	}
 
 	public function delete() {
@@ -127,7 +150,7 @@ class _CONTROLLER_Controller extends Controller implements IController
 		global $token;
 		global $is_debug;
 
-		$this->result = ['message' => 'Sin implementar'];
+		$this->result = ['message' => 'Sin implementar delete'];
 	}
 
 	// utilizando metodo heredado

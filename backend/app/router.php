@@ -38,12 +38,15 @@ if ( $config['require_session'] ) {
 			$return = json_encode(['type' => 'error', 'message' => 'Se require iniciar sessión.']);
 		}
 	}else {
-		$real_func = !empty($_REQUEST['function'])? $_REQUEST['function'] : '';
+		$real_func = !empty($_REQUEST['function'])? $_REQUEST['function'] : null;
 		$_REQUEST['function'] = 'search';
 		$current_user = callController( 'Session', $controllersName, 'GET' ) ;
 		$current_user = get_object_vars( json_decode( $current_user ) );
 		if ( empty($current_user['type']) ) {
-			$_REQUEST['function'] = $real_func;
+			unset($_REQUEST['function']);
+			if (!empty($real_func)){
+				$_REQUEST['function'] = $real_func;
+			}
 			//pr( "callController( $controller, ".implode( '-', $controllersName).", $method )" ) ;
 			unset($_REQUEST['token']);
 			$return = callController( $controller, $controllersName, $method );
@@ -58,8 +61,6 @@ if ( $config['require_session'] ) {
 $db->close();
 echo $return;
 exit;
-
-
 
 function callController( $controller, $controllersName, $method ) {
 	global $db;
